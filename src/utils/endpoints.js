@@ -1,6 +1,6 @@
 
 
-let basicUrl = "https://meeting-organizer-estella.herokuapp.com/"
+let basicUrl = "http://localhost:4000/"
 
 let jwt = null
 
@@ -12,25 +12,24 @@ const getHeader = (method, body = null) => {
             'authorization': jwt
         }
     }
-    if (body !== null) headerWithoutBody.body = JSON.stringify(body)
-    return headerWithoutBody
+    return body !== null ? { ...headerWithoutBody, body: JSON.stringify(body) } : headerWithoutBody
 }
 
 const POST = "POST"
-
 const GET = "GET"
-
 const PUT = "PUT"
 
 const isCorrectResponseStatus = (status) => { return status >= 200 && status < 300 }
 
 const fetchData = (url, method, body) => {
-    return fetch(url,
-        getHeader(method, body)
-    ).then(response => {
-        if (isCorrectResponseStatus(response.status)) return response.body
-        else throw response.body.msg
-    })
+    return fetch(url, getHeader(method, body))
+        .then(response => response.json())
+        .then(response => {
+            console.log(response)
+            if (isCorrectResponseStatus(response.status)) return response
+            else throw response.msg
+        })
+        .catch(error => { throw error })
 }
 
 export const api = {
@@ -45,11 +44,12 @@ export const api = {
 
 
     register: (email, password) => {
-        return fetchData(basicUrl + "register", POST, { email: email, password: password })
+        console.log(email, password)
+        return fetchData(basicUrl + "organizer/register", POST, { email: email, password: password })
     },
 
     login: (email, password) => {
-        return fetchData(basicUrl + "login", POST, { email: email, password: password })
+        return fetchData(basicUrl + "organizer/login", POST, { email: email, password: password })
     },
 
 

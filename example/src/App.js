@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { ExampleComponent } from 'e-stella-meeting-organizer'
+import { MeetingOrganizer } from 'e-stella-meeting-organizer'
 import 'e-stella-meeting-organizer/dist/index.css'
 
 const App = () => {
-  return <ExampleComponent text="Create React Library Example 😄" />
+  return <MeetingOrganizer />
 }
 
 export default App

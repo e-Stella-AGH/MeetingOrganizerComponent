@@ -1,4 +1,4 @@
-
+import Swal from "sweetalert2";
 
 let basicUrl = "http://localhost:4000/"
 
@@ -22,14 +22,29 @@ const PUT = "PUT"
 const isCorrectResponseStatus = (status) => { return status >= 200 && status < 300 }
 
 const fetchData = (url, method, body) => {
+    let swal = new Swal({title: "Getting data"})
+    Swal.showLoading()
     return fetch(url, getHeader(method, body))
         .then(response => response.json())
         .then(response => {
+            swal.close()
+            Swal.fire({
+                title: "Success",
+                icon: "success"
+            })
             console.log(response)
             if (isCorrectResponseStatus(response.status)) return response
             else throw response.msg
         })
-        .catch(error => { throw error })
+        .catch(error => {
+            swal.close()
+            Swal.fire({
+                title: "Something went wrong",
+                text: error,
+                icon: "error"
+            })
+            throw error
+         })
 }
 
 export const api = {
@@ -42,16 +57,13 @@ export const api = {
         basicUrl = url
     },
 
-
-    register: (email, password) => {
-        console.log(email, password)
-        return fetchData(basicUrl + "organizer/register", POST, { email: email, password: password })
+    register: (credentials) => {
+        return fetchData(basicUrl + "organizer/register", POST, { email: credentials.email, password: credentials.password })
     },
 
-    login: (email, password) => {
-        return fetchData(basicUrl + "organizer/login", POST, { email: email, password: password })
+    login: (credentials) => {
+        return fetchData(basicUrl + "organizer/login", POST, { email: credentials.email, password: credentials.password })
     },
-
 
     getTimeSlotsGuest: (uuid) => {
         return fetchData(basicUrl + "meeting/" + uuid, GET)
@@ -69,4 +81,13 @@ export const api = {
         return fetchData(basicUrl + "host/" + uuid, PUT, { timeSlots: timeSlots })
     }
 
+}
+
+export const fetchUserData = (baseLink, jwt) => {
+  return fetch(baseLink + "/api/users/loggedInUser", {
+    method: GET,
+    headers: {
+      "X-JWT": jwt
+    }
+  }).then(response => response.json())
 }

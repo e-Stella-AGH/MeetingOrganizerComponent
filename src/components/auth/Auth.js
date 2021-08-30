@@ -2,8 +2,7 @@ import { Card, CardContent, TextField, Box, Avatar, Typography, CardActions, But
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import React, { useState } from 'react'
 
-export const Register = ({ redirectToLogin, register }) => {
-
+export const Auth = ({handleSubmitProp, welcomeText, ctaText, ghostText, redirect }) => {
   const matches = useMediaQuery('(min-width:720px)')
   const style = !matches ? {width: "90%"} : {width: "40%"}
   const buttonStyle = !matches ? {width: "100%"} : {}
@@ -19,7 +18,7 @@ export const Register = ({ redirectToLogin, register }) => {
   }
 
   const handleSubmit = () => {
-    register(credentials)
+    handleSubmitProp(credentials)
   }
 
   return (
@@ -34,7 +33,7 @@ export const Register = ({ redirectToLogin, register }) => {
         />
       </Box>
       <Box m={2} style={{textAlign: "center"}}>
-        <Typography variant="h4">Welcome!</Typography>
+        <Typography variant="h4">{welcomeText}</Typography>
       </Box>
       <CardContent style={{display: "block", width: "70%", marginLeft: "auto", marginRight: "auto"}}>
         <Box m={2}><TextField variant="outlined" label="E-mail" fullWidth value={credentials.email} onChange={handleEmailChange}/></Box>
@@ -42,10 +41,10 @@ export const Register = ({ redirectToLogin, register }) => {
       </CardContent>
       <Box m={2} mt={0}>
         <CardActions style={{float: "right", marginRight: "15%"}}>
-            <Button color="primary" variant="contained" style={{...buttonStyle}} onClick={handleSubmit}>Register</Button>
+            <Button color="primary" variant="contained" style={{...buttonStyle}} onClick={handleSubmit}>{ctaText}</Button>
         </CardActions>
         <Box style={{marginLeft: "16%", display: "inline-block"}} mt={1}>
-          <Button color="primary" variant="outlined" style={{...buttonStyle}} onClick={redirectToLogin}>Already have account?</Button>
+          <Button color="primary" variant="outlined" style={{...buttonStyle}} onClick={redirect}>{ghostText}</Button>
         </Box>
       </Box>
     </Card>

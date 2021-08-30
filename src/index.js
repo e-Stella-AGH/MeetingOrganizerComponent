@@ -2,17 +2,41 @@ import React, { useEffect, useState } from 'react'
 import { Login } from './components/auth/login'
 import PropTypes from 'prop-types'
 import { api, fetchUserData } from './utils/endpoints'
-import { Register } from './components/Register'
+import { Register } from './components/auth/Register'
+import { Callendar } from './components/Callendar'
+import { MeetingsMainView } from './components/meetings/MeetingsMainView'
+import { jwt } from './utils/jwtApi';
 
-export const MeetingOrganizer = ({ outsideAuthenticator, meetingOrganizerBaseLink }) => {
+console.warn = console.error = () => {};
+
+export const MeetingOrganizer = ({ outsideAuthenticator, meetingOrganizerBaseLink, userData, renderMeetingActions }) => {
+
+  const [organizerData, setOrganizerData] = useState(null)
 
   const loginView = (<Login redirectToRegister={() => setView(registerView)} login={(credentials) => {
     api.login(credentials)
-      .then(data => console.log(data))
+      .then(data => {
+        jwt.set(data.msg)
+        setView(<MeetingsMainView userData={{jwt: api.jwt}} renderMeetingActions={renderMeetingActions} />)
+      })
   }}/>)
-  const registerView = (<Register redirectToLogin={() => setView(loginView)} register={(credentials) => api.register(credentials)} />)
 
-  const [view, setView] = useState(loginView)
+  const registerView = (<Register redirectToLogin={() => setView(loginView)} register={(credentials) => {
+    api.register(credentials)
+      .then(_ => setView(loginView))
+  }} />)
+
+  const getUserView = () => {
+    if(userData?.userType === "job_seeker" || userData?.userType === "developer") {
+      return <Callendar userData={userData} />
+    } 
+    if(organizerData || jwt.isPresent()) {
+      return  <MeetingsMainView userData={organizerData} renderMeetingActions={renderMeetingActions} />
+    }
+    return loginView
+  }
+
+  const [view, setView] = useState(getUserView)
 
   useEffect(() => {
     if (meetingOrganizerBaseLink) api.setUrl(meetingOrganizerBaseLink)

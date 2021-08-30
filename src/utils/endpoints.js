@@ -1,15 +1,14 @@
 import Swal from "sweetalert2";
+import { jwt } from './jwtApi';
 
 let basicUrl = "http://localhost:4000/"
-
-let jwt = null
 
 const getHeader = (method, body = null) => {
     const headerWithoutBody = {
         method: method,
         headers: {
             'Content-Type': 'application/json',
-            'authorization': jwt
+            'authorization': jwt.get()
         }
     }
     return body !== null ? { ...headerWithoutBody, body: JSON.stringify(body) } : headerWithoutBody
@@ -21,8 +20,8 @@ const PUT = "PUT"
 
 const isCorrectResponseStatus = (status) => { return status >= 200 && status < 300 }
 
-const fetchData = (url, method, body) => {
-    let swal = new Swal({title: "Getting data"})
+const fetchData = (url, method, body, title = "Getting data") => {
+    let swal = new Swal({title: title})
     Swal.showLoading()
     return fetch(url, getHeader(method, body))
         .then(response => response.json())
@@ -48,10 +47,6 @@ const fetchData = (url, method, body) => {
 }
 
 export const api = {
-
-    setJwt: (newJWT) => {
-        jwt = newJWT
-    },
 
     setUrl: (url) => {
         basicUrl = url
@@ -79,6 +74,11 @@ export const api = {
 
     updateTimeSlotsHost: (uuid, timeSlots) => {
         return fetchData(basicUrl + "host/" + uuid, PUT, { timeSlots: timeSlots })
+    },
+
+    createMeeting: (body) => {
+        console.log(body, jwt.get())
+        return fetchData(basicUrl + 'meeting/', POST, body, "Creating meeting")
     }
 
 }

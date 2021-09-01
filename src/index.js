@@ -3,7 +3,7 @@ import { Login } from './components/auth/login'
 import PropTypes from 'prop-types'
 import { api, fetchUserData } from './utils/endpoints'
 import { Register } from './components/auth/Register'
-import { Callendar } from './components/Callendar'
+import { EStellaCalendar } from './components/Callendar'
 import { MeetingsMainView } from './components/meetings/MeetingsMainView'
 import { jwt } from './utils/jwtApi';
 
@@ -11,13 +11,11 @@ console.warn = console.error = () => {};
 
 export const MeetingOrganizer = ({ outsideAuthenticator, meetingOrganizerBaseLink, userData, renderMeetingActions }) => {
 
-  const [organizerData, setOrganizerData] = useState(null)
-
   const loginView = (<Login redirectToRegister={() => setView(registerView)} login={(credentials) => {
     api.login(credentials)
       .then(data => {
         jwt.set(data.msg)
-        setView(<MeetingsMainView userData={{jwt: api.jwt}} renderMeetingActions={renderMeetingActions} />)
+        setView(<MeetingsMainView renderMeetingActions={renderMeetingActions} />)
       })
   }}/>)
 
@@ -27,11 +25,11 @@ export const MeetingOrganizer = ({ outsideAuthenticator, meetingOrganizerBaseLin
   }} />)
 
   const getUserView = () => {
-    if(userData?.userType === "job_seeker" || userData?.userType === "developer") {
-      return <Callendar userData={userData} />
+    if(userData?.userType === "job_seeker" || userData?.userType === "host") {
+      return <EStellaCalendar userData={userData} />
     } 
-    if(organizerData || jwt.isPresent()) {
-      return  <MeetingsMainView userData={organizerData} renderMeetingActions={renderMeetingActions} />
+    if(jwt.isPresent()) {
+      return  <MeetingsMainView renderMeetingActions={renderMeetingActions} />
     }
     return loginView
   }

@@ -13,16 +13,16 @@ const renderMeetingActions = () => {
                 <AddCircleOutlineIcon fontSize="large" color="action" />
             </Button>
         </ListItemIcon>
-    </ListItem>
-    <ListItem>
-      XD
-    </ListItem>
-  </>
+      </ListItem>
+      <ListItem>
+        XD
+      </ListItem>
+    </>
   )
 }
 
 const App = () => {
-  return <MeetingOrganizer />
+  return <MeetingOrganizer userData={ { userType: 'host', uuid: 'fdd612f3-c0ba-4534-adca-737432b9cace' } } />
 }
 
 export default App

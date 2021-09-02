@@ -28,6 +28,12 @@ export const MeetingsMainView = ({ userData, renderMeetingActions }) => {
                 <List>
                     {renderMeetingActions?.()}
                 </List>
+                <Divider />
+                <List>
+                    <ListItem>
+                        <Button variant="contained" color="primary" onClick={() => {jwt.remove(); window.location.reload()}}>Logout</Button>
+                    </ListItem>
+                </List>
             </Drawer>
         </div>
     )

@@ -6,8 +6,9 @@ import parse from 'date-fns/parse'
 import startOfWeek from 'date-fns/startOfWeek'
 import getDay from 'date-fns/getDay'
 import enUS from 'date-fns/locale/en-US'
-import { api } from '../utils/endpoints';
+import { api } from '../../utils/endpoints';
 import Swal from 'sweetalert2';
+import { hostFunctions, jobSeekerFunctions } from './calendarUtils';
 
 const locales = {
   'en-US': enUS
@@ -21,51 +22,34 @@ const localizer = dateFnsLocalizer({
   locales,
 })
 
-const parseToEvents = (timeSlots) => timeSlots.map(timeSlot => {
+const parseToEvents = (timeSlots, title) => timeSlots.map(timeSlot => {
     const start = new Date(timeSlot.startDatetime)
     const end = new Date(start.getTime() + Number(timeSlot.duration * 60 * 1000))
     return {
-        title: 'Possible interview slot',
+        title: title,
         start: start,
         end: end
     }
 })
 
-const showDate = (date) => 
-    `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
-
-const getDifferenceInMinutes = (start, end) => {
-    return Math.floor( (Math.abs(end - start)) / 1000 / 60)
-}
 
 export const EStellaCalendar = ({ calendarStyle, userData }) => {
 
     const [slots, setSlots] = useState([])
     const [reload, setReload] = useState(false)
-    console.log(parseToEvents(slots))
+
+    const functionSource = userData?.userType === "host" ? hostFunctions : jobSeekerFunctions
 
     const handleSelectSlot = (slotInfo) => {
-        Swal.fire({
-            icon: 'question',
-            html: `You are going to set a new slot for interviews: <strong>${showDate(slotInfo.start)}</strong> - <strong>${showDate(slotInfo.end)}</strong>. Are you sure?`
-        }).then(result => {
-            if(result.isConfirmed) {
-                api.updateTimeSlotsHost(userData.uuid, [...slots, { startDatetime: slotInfo.start, duration: getDifferenceInMinutes(slotInfo.start, slotInfo.end) }])
-                    .then(data => setReload(!reload))
-            }
-        })
+        functionSource.onSelectSlot(slotInfo, reload, setReload, slots, userData)
     }
 
     const handleEventDeletion = (event) => {
-        console.log(event)
-        console.log(slots)
-        slots.filter(slot => new Date(slot.startDatetime) !== event.start && (new Date(new Date(slot.startDatetime).getTime() + Number(slot.duration * 60 * 1000))) !== event.end)
-        console.log(slots)
+        functionSource.onDoubleClickEvent(event, slots, setSlots)
     }
 
     useEffect(() => {
-        api.getTimeSlotsHost(userData.uuid)
-            .then(data => setSlots(data.host.TimeSlots))
+        functionSource.getSlots(userData.uuid, setSlots)
     }, [reload])
 
     const minTime = new Date()
@@ -78,7 +62,7 @@ export const EStellaCalendar = ({ calendarStyle, userData }) => {
             <Calendar
                 localizer={localizer}
                 style={calendarStyle}
-                events={parseToEvents(slots)}
+                events={parseToEvents(slots, functionSource.getEventTitle())}
                 selectable
                 onSelectSlot={handleSelectSlot}
                 defaultView='week'
@@ -91,5 +75,5 @@ export const EStellaCalendar = ({ calendarStyle, userData }) => {
 }
 
 EStellaCalendar.defaultProps = {
-    calendarStyle: {height: 600}
+    calendarStyle: {height: 800}
 }

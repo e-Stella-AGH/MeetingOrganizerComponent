@@ -77,8 +77,11 @@ export const api = {
     },
 
     createMeeting: (body) => {
-        console.log(body, jwt.get())
         return fetchData(basicUrl + 'meeting/', POST, body, "Creating meeting")
+    },
+
+    selectMeetingByGuest: (body, uuid) => {
+        return fetchData(`${basicUrl}meeting/${uuid}/pick_time_slot`, PUT, body)
     }
 
 }

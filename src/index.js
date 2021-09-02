@@ -3,7 +3,7 @@ import { Login } from './components/auth/login'
 import PropTypes from 'prop-types'
 import { api, fetchUserData } from './utils/endpoints'
 import { Register } from './components/auth/Register'
-import { EStellaCalendar } from './components/Callendar'
+import { EStellaCalendar } from './components/callendar/Callendar'
 import { MeetingsMainView } from './components/meetings/MeetingsMainView'
 import { jwt } from './utils/jwtApi';
 

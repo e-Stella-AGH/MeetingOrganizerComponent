@@ -1,3 +1,5 @@
+import { api } from "./endpoints"
+
 export const jwt = {
 
     set: (jwt) => {
@@ -14,6 +16,10 @@ export const jwt = {
 
     remove: () => {
         localStorage.removeItem("MeetingOrganizerJWT", jwt)
+    },
+
+    isValid: async () => {
+        return jwt.isPresent() && await api.getStatusCode() < 300
     }
 
 }

@@ -2,12 +2,12 @@ import { Card, CardContent, TextField, Box, Avatar, Typography, CardActions, But
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import React, { useState } from 'react'
 
-export const Auth = ({handleSubmitProp, welcomeText, ctaText, ghostText, redirect }) => {
+export const Auth = ({ handleSubmitProp, welcomeText, ctaText, ghostText, redirect, additionalText }) => {
   const matches = useMediaQuery('(min-width:720px)')
   const style = !matches ? {width: "90%"} : {width: "40%"}
   const buttonStyle = !matches ? {width: "100%"} : {}
   
-  const [credentials, setCredentials] = useState({email: '', password: ''})
+  const [credentials, setCredentials] = useState({email: '', password: '', repeatedPassword: ''})
 
   const handleEmailChange = ({ target }) => {
     setCredentials({...credentials, email: target.value.trim()})
@@ -15,6 +15,10 @@ export const Auth = ({handleSubmitProp, welcomeText, ctaText, ghostText, redirec
 
   const handlePassChange = ({ target }) => {
     setCredentials({...credentials, password: target.value})
+  }
+
+  const handleRepeatPassChange = ({ target }) => {
+    setCredentials({...credentials, repeatedPassword: target.value})
   }
 
   const handleSubmit = () => {
@@ -34,10 +38,12 @@ export const Auth = ({handleSubmitProp, welcomeText, ctaText, ghostText, redirec
       </Box>
       <Box m={2} style={{textAlign: "center"}}>
         <Typography variant="h4">{welcomeText}</Typography>
+        { additionalText && <Typography variant="subtitle2" style={{marginTop: '2em'}}>{additionalText}</Typography> }
       </Box>
       <CardContent style={{display: "block", width: "70%", marginLeft: "auto", marginRight: "auto"}}>
         <Box m={2}><TextField variant="outlined" label="E-mail" fullWidth value={credentials.email} onChange={handleEmailChange}/></Box>
         <Box m={2}><TextField variant="outlined" label="Password" fullWidth type="password" value={credentials.password} onChange={handlePassChange}/></Box>
+        { additionalText && <Box m={2}><TextField variant="outlined" label="Reapeat password" fullWidth type="password" value={credentials.secondPassword} onChange={handleRepeatPassChange}/></Box> }
       </CardContent>
       <Box m={2} mt={0}>
         <CardActions style={{float: "right", marginRight: "15%"}}>

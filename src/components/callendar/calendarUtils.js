@@ -26,6 +26,7 @@ export const hostFunctions = {
             html: `You are going to set a new slot for interviews: <strong>${showDate(slotInfo.start)}</strong> - <strong>${showDate(slotInfo.end)}</strong>. Are you sure?`
         }).then(result => {
             if(result.isConfirmed) {
+                //Radek please change this array to some function that will do find and union
                 api.updateTimeSlotsHost(userData.uuid, [...slots, { startDatetime: slotInfo.start, duration: getDifferenceInMinutes(slotInfo.start, slotInfo.end) }])
                     .then(data => setReload(!reload))
             }

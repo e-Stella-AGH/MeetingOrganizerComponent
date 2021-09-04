@@ -31,7 +31,7 @@ const setDuration = (duration) => {
     info['duration'] = Number(duration)
 }
 
-const fireSetDuration = () => {
+const fireSetDuration = (reload, setReload) => {
     MySwal.fire({
         ...basicSwal,
         text: "Add Duration in minutes",
@@ -41,28 +41,29 @@ const fireSetDuration = () => {
             console.log(jwt.get())
             setDuration(result.value)
             api.createMeeting({ hosts: info['hosts'], guest: info['guest'], duration: info['duration'] })
+                .then(data => setReload(!reload))
         }
     })
 }
 
-const fireSetGuest = () => {
+const fireSetGuest = (reload, setReload) => {
     MySwal.fire({
         ...basicSwal,
         html: <AddGuest addGuest={setGuest} />
     }).then(result => {
         if(result.isConfirmed) {
-            fireSetDuration()
+            fireSetDuration(reload, setReload)
         }
     })
 }
 
-export const addMeetingPath = () => {
+export const addMeetingPath = (reload, setReload) => {
     MySwal.fire({
         ...basicSwal,
         html: <AddHosts addHosts={setHosts} />
     }).then(result => {
         if(result.isConfirmed) {
-            fireSetGuest()
+            fireSetGuest(reload, setReload)
         }
     })
 }

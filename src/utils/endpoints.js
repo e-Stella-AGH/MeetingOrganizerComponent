@@ -17,6 +17,7 @@ const getHeader = (method, body = null) => {
 const POST = "POST"
 const GET = "GET"
 const PUT = "PUT"
+const DELETE = "DELETE"
 
 const isCorrectResponseStatus = (status) => { return status >= 200 && status < 300 }
 
@@ -73,7 +74,7 @@ export const api = {
     },
 
     updateTimeSlotsHost: (uuid, timeSlots) => {
-        return fetchData(basicUrl + "host/" + uuid, PUT, { timeSlots: timeSlots })
+        return fetchData(basicUrl + "host/" + uuid, PUT, timeSlots)
     },
 
     createMeeting: (body) => {
@@ -82,6 +83,19 @@ export const api = {
 
     selectMeetingByGuest: (body, uuid) => {
         return fetchData(`${basicUrl}meeting/${uuid}/pick_time_slot`, PUT, body)
+    },
+
+    getStatusCode: () => {
+        return fetch(`${basicUrl}meeting`, {method: 'GET', headers: {'authorization': jwt.get()}})
+            .then(response => response.status)
+    },
+
+    getMeetingsByOrganizer: () => {
+        return fetchData(`${basicUrl}meeting`, GET)
+    },
+
+    deleteMeetingByUuid: (uuid) => {
+        return fetchData(`${basicUrl}meeting/${uuid}`, DELETE)
     }
 
 }

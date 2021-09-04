@@ -6,10 +6,11 @@ import { Register } from './components/auth/Register'
 import { EStellaCalendar } from './components/callendar/Callendar'
 import { MeetingsMainView } from './components/meetings/MeetingsMainView'
 import { jwt } from './utils/jwtApi';
+import Swal from 'sweetalert2';
 
 console.warn = console.error = () => {};
 
-export const MeetingOrganizer = ({ outsideAuthenticator, meetingOrganizerBaseLink, userData, renderMeetingActions }) => {
+export const MeetingOrganizer = ({ outsideAuthenticator, meetingOrganizerBaseLink, userData, renderMeetingActions, theme }) => {
 
   const loginView = (<Login redirectToRegister={() => setView(registerView)} login={(credentials) => {
     api.login(credentials)
@@ -20,21 +21,38 @@ export const MeetingOrganizer = ({ outsideAuthenticator, meetingOrganizerBaseLin
   }}/>)
 
   const registerView = (<Register redirectToLogin={() => setView(loginView)} register={(credentials) => {
-    api.register(credentials)
+    if(credentials.password != credentials.repeatedPassword) {
+      Swal.fire({
+        title: 'Error',
+        text: `Passwords don't match`,
+        icon: 'error'
+      })
+    } else {
+      api.register(credentials)
       .then(_ => setView(loginView))
+    }
   }} />)
 
-  const getUserView = () => {
+  const getUserView = (isValidJwt) => {
     if(userData?.userType === "job_seeker" || userData?.userType === "host") {
       return <EStellaCalendar userData={userData} />
     } 
-    if(jwt.isPresent()) {
-      return  <MeetingsMainView renderMeetingActions={renderMeetingActions} />
+    if(isValidJwt) {
+      return <MeetingsMainView renderMeetingActions={renderMeetingActions} />
     }
     return loginView
   }
 
-  const [view, setView] = useState(getUserView)
+  const [view, setView] = useState(null)
+
+  useEffect(() => {
+    Swal.showLoading()
+    jwt.isValid()
+      .then(isValid => {
+        setView(getUserView(isValid))
+        Swal.close()
+      })
+  }, [])
 
   useEffect(() => {
     if (meetingOrganizerBaseLink) api.setUrl(meetingOrganizerBaseLink)
@@ -46,7 +64,9 @@ export const MeetingOrganizer = ({ outsideAuthenticator, meetingOrganizerBaseLin
 
   return (
     <div>
-      {view}
+      { theme ? <ThemeProvider theme={theme}>
+        {view}
+      </ThemeProvider> : view }
     </div>
   )
 }

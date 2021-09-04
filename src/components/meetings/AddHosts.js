@@ -3,6 +3,7 @@ import { TextField, IconButton, Chip, Avatar, Typography } from '@material-ui/co
 import DoneIcon from '@material-ui/icons/Done'
 import { validateEmail } from '../../utils/utils'
 import Swal from 'sweetalert2'
+import { HostsList } from './HostsList'
 
 export const AddHosts = ({ addHosts }) => {
 
@@ -27,8 +28,6 @@ export const AddHosts = ({ addHosts }) => {
         }
     }
 
-    const getHosts = () => hosts.map(host => (<Chip avatar={<Avatar>{host[0]}</Avatar>} label={host} color="primary" onDelete={() => handleHostDelete(host)} />))
-
     return (
         <div style={{minHeight: "50vh"}}>
             <Typography variant="h4" style={{marginBottom: "3em"}}>Add hosts</Typography>
@@ -41,8 +40,8 @@ export const AddHosts = ({ addHosts }) => {
             <IconButton onClick={addCurrentHost}>
                 <DoneIcon />
             </IconButton>
-            <div style={{display: 'flex', flexFlow: 'row wrap', justifyContent: 'center', marginTop: '2em'}}>
-                {getHosts()}
+            <div style={{marginTop: '2em'}}>
+                <HostsList hosts={hosts} onDelete={(host) => handleHostDelete(host)} />
             </div>
         </div>
     )

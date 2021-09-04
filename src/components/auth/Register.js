@@ -8,6 +8,6 @@ export const Register = ({ redirectToLogin, register }) => {
   }
 
   return (
-    <Auth handleSubmitProp={handleSubmit} welcomeText="Welcome!" ctaText="Register" ghostText="Already have an account?" redirect={redirectToLogin} />
+    <Auth handleSubmitProp={handleSubmit} welcomeText="Register" additionalText="With registering you can adding meetings and much more" ctaText="Register" ghostText="Already have an account?" redirect={redirectToLogin} />
   )
 }

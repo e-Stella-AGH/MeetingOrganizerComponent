@@ -38,7 +38,6 @@ const fireSetDuration = (reload, setReload) => {
         input: 'number'
     }).then(result => {
         if(result.isConfirmed) {
-            console.log(jwt.get())
             setDuration(result.value)
             api.createMeeting({ hosts: info['hosts'], guest: info['guest'], duration: info['duration'] })
                 .then(data => setReload(!reload))

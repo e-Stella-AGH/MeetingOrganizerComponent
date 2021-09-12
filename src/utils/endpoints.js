@@ -96,6 +96,11 @@ export const api = {
 
     deleteMeetingByUuid: (uuid) => {
         return fetchData(`${basicUrl}meeting/${uuid}`, DELETE)
+    },
+
+    registerFromIntegration: (jwt) => {
+        return fetch(`${basicUrl}organizer/login_integration`, { method: 'POST', headers: { 'authorization': jwt } })
+            .then(response => response.text())
     }
 
 }

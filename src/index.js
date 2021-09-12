@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 
 console.warn = console.error = () => {};
 
-export const MeetingOrganizer = ({ outsideAuthenticator, meetingOrganizerBaseLink, userData, renderMeetingActions, theme }) => {
+export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userData, renderMeetingActions, theme }) => {
 
   const loginView = (<Login redirectToRegister={() => setView(registerView)} login={(credentials) => {
     api.login(credentials)
@@ -43,24 +43,33 @@ export const MeetingOrganizer = ({ outsideAuthenticator, meetingOrganizerBaseLin
     return loginView
   }
 
+  useEffect(() => {
+    if(outsideJwt) {
+      api.registerFromIntegration(outsideJwt)
+        .then(data => {
+          console.log(data)
+          jwt.set(outsideJwt)
+          Swal.close()
+          setView(getUserView(true))
+        })
+    }
+  }, [])
+
   const [view, setView] = useState(null)
 
   useEffect(() => {
     Swal.showLoading()
-    jwt.isValid()
-      .then(isValid => {
-        setView(getUserView(isValid))
-        Swal.close()
-      })
-  }, [])
-
-  useEffect(() => {
-    if (meetingOrganizerBaseLink) api.setUrl(meetingOrganizerBaseLink)
-    if(outsideAuthenticator) {
-      fetchUserData(outsideAuthenticator.baseLink, outsideAuthenticator.jwt)
-        .then(data => console.log(data))
+    if(!outsideJwt){
+      jwt.isValid()
+        .then(isValid => {
+          console.log(isValid)
+          setView(getUserView(isValid))
+          Swal.close()
+        })
     }
   }, [])
+
+  if(meetingOrganizerBaseLink) api.setUrl(meetingOrganizerBaseLink)
 
   return (
     <div>

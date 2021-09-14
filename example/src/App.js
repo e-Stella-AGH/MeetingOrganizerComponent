@@ -22,7 +22,7 @@ const renderMeetingActions = () => {
 }
 
 const App = () => {
-  return <MeetingOrganizer userData={ { userType: 'host', uuid: '2322afac-7574-4ccc-9ed9-b8aaf552b595' } } />
+  return <MeetingOrganizer userData={ { userType: 'job_seeker', uuid: '45abca05-01ad-4826-a1b7-56a31861ebc8' } } />
 }
 
 export default App

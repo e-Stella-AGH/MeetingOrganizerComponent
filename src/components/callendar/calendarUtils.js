@@ -1,5 +1,6 @@
 import { api } from '../../utils/endpoints';
 import Swal from 'sweetalert2'
+import { joinSlots } from './findUnion';
 
 const showDate = (date) => 
     `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
@@ -15,9 +16,9 @@ export const hostFunctions = {
     },
 
     onDoubleClickEvent: (event, slots, setSlots) => {
-        const newSlots = slots.filter(slot => new Date(slot.startDatetime) !== event.start && (new Date(new Date(slot.startDatetime).getTime() + Number(slot.duration * 60 * 1000))) !== event.end)
-        console.log(newSlots)
+        const newSlots = slots.filter(slot => new Date(slot.startDatetime).toUTCString() !== event.start.toUTCString())
         setSlots(newSlots)
+        //request
     },
 
     onSelectSlot: (slotInfo, reload, setReload, slots, userData) => {
@@ -26,8 +27,14 @@ export const hostFunctions = {
             html: `You are going to set a new slot for interviews: <strong>${showDate(slotInfo.start)}</strong> - <strong>${showDate(slotInfo.end)}</strong>. Are you sure?`
         }).then(result => {
             if(result.isConfirmed) {
-                //Radek please change this array to some function that will do find and union
-                api.updateTimeSlotsHost(userData.uuid, [...slots, { startDatetime: slotInfo.start, duration: getDifferenceInMinutes(slotInfo.start, slotInfo.end) }])
+                const newSlots = slots.map(slot => {
+                    return {
+                        ...slot,
+                        startDatetime: new Date(slot.startDatetime)
+                    }
+                })
+                const unionSlots = joinSlots([...newSlots, { startDatetime: slotInfo.start, duration: getDifferenceInMinutes(slotInfo.start, slotInfo.end) }])
+                api.updateTimeSlotsHost(userData.uuid, unionSlots)
                     .then(data => setReload(!reload))
             }
         })
@@ -43,7 +50,9 @@ export const jobSeekerFunctions = {
     },
 
     onDoubleClickEvent: (event, slots, setSlots) => {
-        api.selectMeetingByGuest({ startTime: event.start })
+        //duration jeszcze
+        const duration = getDifferenceInMinutes(event.start, event.end)
+        api.selectMeetingByGuest({ startTime: event.start, duration: duration })
     },
 
     //he cannot do it XD

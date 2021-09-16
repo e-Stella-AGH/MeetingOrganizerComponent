@@ -1,7 +1,6 @@
 // Set structure: {parent, rank, slot}
 
-const slotEndTime = (slot) =>
-  new Date(slot.startDatetime.getTime() + slot.duration * 60_000)
+const slotEndTime = (slot) => new Date(slot.startDatetime.getTime() + slot.duration * 60000)
 
 const slotEndTimeInsideSlotTime = (slot1, slot2) => {
   const endtime1 = slotEndTime(slot1)
@@ -36,7 +35,7 @@ const union = (set1, set2) => {
   parent1.slot.startDatetime = new Date(
     Math.min(parent1.slot.startDatetime, parent2.slot.startDatetime)
   )
-  parent1.slot.duration = (max - parent1.slot.startDatetime.getTime()) / 60_000
+  parent1.slot.duration = (max - parent1.slot.startDatetime.getTime()) / 60000
   parent2.parent = parent1
   if (parent1.rank == parent2.rank) parent1.rank++
 }
@@ -61,11 +60,11 @@ Array.prototype.unique = function () {
 }
 
 const sortByDate = (a, b) => {
+  console.log(a, b)
   return a.startDatetime.getTime() > b.startDatetime.getTime() ? 1 : -1
 }
 
 export const joinSlots = (slots) => {
-  slots.sort(sortByDate)
   const sets = slots.map((slot) => newSet(slot))
 
   for (let set1 of sets) {

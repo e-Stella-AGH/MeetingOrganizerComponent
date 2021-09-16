@@ -28,7 +28,7 @@ export const SingleMeeting = ({ meeting, reload, setReload }) => {
                 <Divider style={{marginTop: '1em', marginBottom: '1em'}} />
 
                 <Typography variant="h6">Guest:</Typography>
-                <Chip avatar={<Avatar>{meeting.Guest.email[0].toUpperCase()}</Avatar>} label={meeting.Guest.email} color="secondary" />
+                <Chip avatar={<Avatar>{meeting?.Guest?.email[0]?.toUpperCase()}</Avatar>} label={meeting?.Guest?.email} color="secondary" />
 
                 <Divider style={{marginTop: '1em', marginBottom: '1em'}} />
 

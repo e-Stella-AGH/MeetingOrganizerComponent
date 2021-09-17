@@ -59,14 +59,14 @@ export const jobSeekerFunctions = (outerOnPickSlot) => {
                 .then(data => setSlots(data?.timeSlots))
         },
 
-        onDoubleClickEvent: (event, slots, setSlots) => {
+        onDoubleClickEvent: (event, slots, uuid, reload, setReload) => {
             const duration = getDifferenceInMinutes(event.start, event.end)
             Swal.fire({
                 icon: 'question',
                 text: `Are you sure you want to pick this slot? You won't be able to change it by our system!`
             }).then(result => {
                 if(result.isConfirmed) {
-                    api.selectMeetingByGuest({ startTime: event.start, duration: duration })
+                    api.selectMeetingByGuest({ startTime: event.start, duration: duration }, uuid)
                     outerOnPickSlot({ startTime: event.start, duration: duration })
                 }
             })

@@ -46,7 +46,7 @@ export const EStellaCalendar = ({ calendarStyle, userData, outerOnPickSlot }) =>
         functionSource.onSelectSlot(slotInfo, reload, setReload, slots, userData)
     }
 
-    const handleEventDeletion = (event) => {
+    const handleEventDoubleClick = (event) => {
         functionSource.onDoubleClickEvent(event, slots, userData.uuid, reload, setReload)
     }
 
@@ -70,7 +70,7 @@ export const EStellaCalendar = ({ calendarStyle, userData, outerOnPickSlot }) =>
                 defaultView='week'
                 max={maxTime}
                 min={minTime}
-                onDoubleClickEvent={handleEventDeletion}
+                onDoubleClickEvent={handleEventDoubleClick}
             />
         </div>
     )

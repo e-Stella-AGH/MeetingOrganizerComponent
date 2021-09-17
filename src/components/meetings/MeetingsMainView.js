@@ -7,7 +7,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { api } from '../../utils/endpoints';
 import { SingleMeeting } from './SingleMeeting'
 
-export const MeetingsMainView = ({ userData, renderMeetingActions, showLogout }) => {
+export const MeetingsMainView = ({ userData, renderMeetingActions, showLogout, drawerStyle: outerDrawerStyle }) => {
 
     const [meetings, setMeetings] = useState([])
     const [reload, setReload] = useState(false)
@@ -16,6 +16,8 @@ export const MeetingsMainView = ({ userData, renderMeetingActions, showLogout })
         api.getMeetingsByOrganizer()
             .then(data => setMeetings(data?.msg || []))
     }, [reload])
+
+    const drawerStyle = outerDrawerStyle || {}
 
     const getMeetings = () => meetings.map(meeting => (
         <SingleMeeting key={meeting.uuid} meeting={meeting} reload={reload} setReload={setReload}/>
@@ -30,7 +32,7 @@ export const MeetingsMainView = ({ userData, renderMeetingActions, showLogout })
                 variant="permanent"
                 style={{display: "flex", alignItems: "center"}}
             >
-                <List>
+                <List style={{...drawerStyle}}>
                 <ListItem>
                     <ListItemIcon>
                         <Button

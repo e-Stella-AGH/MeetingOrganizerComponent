@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 
 console.warn = console.error = () => {};
 
-export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userData, renderMeetingActions, theme, outerFunctions, showLogout }) => {
+export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userData, renderMeetingActions, theme, outerFunctions, showLogout, drawerStyle }) => {
 
   const loginView = (<Login redirectToRegister={() => setView(registerView)} login={(credentials) => {
     api.login(credentials)
@@ -40,7 +40,7 @@ export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userDat
       return <EStellaCalendar userData={userData} outerOnPickSlot={outerFunctions?.onPickSlot || emptyFunction} />
     } 
     if(isValidJwt) {
-      return <MeetingsMainView renderMeetingActions={renderMeetingActions} showLogout={!!showLogout} />
+      return <MeetingsMainView renderMeetingActions={renderMeetingActions} showLogout={!!showLogout} drawerStyle={drawerStyle} />
     }
     return loginView
   }
@@ -91,5 +91,6 @@ MeetingOrganizer.propTypes = {
   outerFunctions: PropTypes.exact({
     onPickSlot: PropTypes.func.isRequired
   }),
-  showLogout: PropTypes.bool
+  showLogout: PropTypes.bool,
+  drawerStyle: PropTypes.object
 }

@@ -40,7 +40,7 @@ export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userDat
       return <EStellaCalendar userData={userData} outerOnPickSlot={outerFunctions?.onPickSlot || emptyFunction} />
     } 
     if(isValidJwt) {
-      return <MeetingsMainView renderMeetingActions={renderMeetingActions} showLogout={!!showLogout} onCreate={outerFunctions?.onCreateMeeting || emptyFunction} />
+      return <MeetingsMainView renderMeetingActions={renderMeetingActions} showLogout={!!showLogout} />
     }
     return loginView
   }
@@ -89,8 +89,7 @@ MeetingOrganizer.propTypes = {
   }),
   renderMeetingActions: PropTypes.func,
   outerFunctions: PropTypes.exact({
-    onPickSlot: PropTypes.func.isRequired,
-    onCreateMeeting: PropTypes.func.isRequired
+    onPickSlot: PropTypes.func.isRequired
   }),
   showLogout: PropTypes.bool
 }

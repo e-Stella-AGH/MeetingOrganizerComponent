@@ -35,7 +35,7 @@ export const SingleMeeting = ({ meeting, reload, setReload }) => {
                 <Divider style={{marginTop: '1em', marginBottom: '1em'}} />
 
                 <Typography variant="h6">Hosts:</Typography>
-                <HostsList hosts={meeting.Hosts.map(host => host.email)} />
+                <HostsList hosts={meeting?.Hosts?.map(host => host.email) || []} />
 
                 <Divider style={{marginTop: '1em', marginBottom: '1em'}} />
             </CardContent>

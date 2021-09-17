@@ -3,6 +3,7 @@ import { Card, CardContent, Typography, Divider, Chip, Avatar, CardActions, Butt
 import { HostsList } from './HostsList'
 import Swal from 'sweetalert2';
 import { api } from '../../utils/endpoints'
+import { showDate } from '../callendar/calendarUtils';
 
 export const SingleMeeting = ({ meeting, reload, setReload }) => {
 
@@ -25,6 +26,7 @@ export const SingleMeeting = ({ meeting, reload, setReload }) => {
             <CardContent>
 
                 <Typography variant="h5">Meeting: {meeting.uuid.slice(0, 8)}</Typography>
+                <Typography variant="h6" color="textSecondary" style={{float: "left"}}>{ !!meeting?.startTime ? `Meeting time: ${showDate(new Date(meeting.startTime))}` : "Time for this meeting wasn't picked yet" }</Typography>
                 <Divider style={{marginTop: '1em', marginBottom: '1em'}} />
 
                 <Typography variant="h6">Guest:</Typography>

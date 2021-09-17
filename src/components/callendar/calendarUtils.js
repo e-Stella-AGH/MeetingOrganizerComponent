@@ -2,7 +2,7 @@ import { api } from '../../utils/endpoints';
 import Swal from 'sweetalert2'
 import { joinSlots } from './findUnion';
 
-const showDate = (date) => 
+export const showDate = (date) => 
     `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
 
 const getDifferenceInMinutes = (start, end) => {

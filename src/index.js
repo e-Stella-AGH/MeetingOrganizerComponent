@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 
 console.warn = console.error = () => {};
 
-export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userData, renderMeetingActions, theme, outerOnPickSlot }) => {
+export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userData, renderMeetingActions, theme, outerFunctions, showLogout }) => {
 
   const loginView = (<Login redirectToRegister={() => setView(registerView)} login={(credentials) => {
     api.login(credentials)
@@ -33,12 +33,14 @@ export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userDat
     }
   }} />)
 
+  const emptyFunction = () => {}
+
   const getUserView = (isValidJwt) => {
     if(userData?.userType === "job_seeker" || userData?.userType === "host") {
-      return <EStellaCalendar userData={userData} outerOnPickSlot={outerOnPickSlot} />
+      return <EStellaCalendar userData={userData} outerOnPickSlot={outerFunctions?.onPickSlot || emptyFunction} />
     } 
     if(isValidJwt) {
-      return <MeetingsMainView renderMeetingActions={renderMeetingActions} />
+      return <MeetingsMainView renderMeetingActions={renderMeetingActions} showLogout={!!showLogout} onCreate={outerFunctions?.onCreateMeeting || emptyFunction} />
     }
     return loginView
   }
@@ -86,5 +88,9 @@ MeetingOrganizer.propTypes = {
     uuid: PropTypes.string
   }),
   renderMeetingActions: PropTypes.func,
-  outerOnPickSlot: PropTypes.func
+  outerFunctions: PropTypes.exact({
+    onPickSlot: PropTypes.func.isRequired,
+    onCreateMeeting: PropTypes.func.isRequired
+  }),
+  showLogout: PropTypes.bool
 }

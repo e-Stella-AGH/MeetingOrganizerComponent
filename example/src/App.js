@@ -22,7 +22,9 @@ const renderMeetingActions = () => {
 }
 
 const App = () => {
-  return <MeetingOrganizer userData={ { userType: 'job_seeker', uuid: '8380a212-3e29-430b-9d13-a752036ba6c4' } } />
+  return <MeetingOrganizer userData={ { userType: 'job_seeker', uuid: "bb86c4d4-3422-4f88-8d51-f3527e47276a" } }
+    outerFunctions = {{onCreateMeeting: (meeting) => console.log(meeting), onPickSlot: (slot) => console.log(slot)}}
+  />
 }
 
 export default App

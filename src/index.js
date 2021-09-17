@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 
 console.warn = console.error = () => {};
 
-export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userData, renderMeetingActions, theme }) => {
+export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userData, renderMeetingActions, theme, outerOnPickSlot }) => {
 
   const loginView = (<Login redirectToRegister={() => setView(registerView)} login={(credentials) => {
     api.login(credentials)
@@ -29,13 +29,13 @@ export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userDat
       })
     } else {
       api.register(credentials)
-      .then(_ => setView(loginView))
+        .then(_ => setView(loginView))
     }
   }} />)
 
   const getUserView = (isValidJwt) => {
     if(userData?.userType === "job_seeker" || userData?.userType === "host") {
-      return <EStellaCalendar userData={userData} />
+      return <EStellaCalendar userData={userData} outerOnPickSlot={outerOnPickSlot} />
     } 
     if(isValidJwt) {
       return <MeetingsMainView renderMeetingActions={renderMeetingActions} />
@@ -47,7 +47,6 @@ export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userDat
     if(outsideJwt) {
       api.registerFromIntegration(outsideJwt)
         .then(data => {
-          console.log(data)
           jwt.set(outsideJwt)
           Swal.close()
           setView(getUserView(true))
@@ -62,7 +61,6 @@ export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userDat
     if(!outsideJwt){
       jwt.isValid()
         .then(isValid => {
-          console.log(isValid)
           setView(getUserView(isValid))
           Swal.close()
         })
@@ -81,8 +79,12 @@ export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userDat
 }
 
 MeetingOrganizer.propTypes = {
-  outsideAuthenticator: PropTypes.shape({
-    jwt: PropTypes.string.isRequired,
-    baseLink: PropTypes.string.isRequired
-  })
+  outsideJwt: PropTypes.string,
+  meetingOrganizerBaseLink: PropTypes.string,
+  userData: PropTypes.exact({
+    userType: PropTypes.oneOf(['job_seeker', 'host', 'organizer']).isRequired,
+    uuid: PropTypes.string
+  }),
+  renderMeetingActions: PropTypes.func,
+  outerOnPickSlot: PropTypes.func
 }

@@ -17,7 +17,9 @@ const locales = {
 const localizer = dateFnsLocalizer({
   format,
   parse,
-  startOfWeek,
+  startOfWeek: () => {
+    return startOfWeek(new Date(), { weekStartsOn: 1 });
+  },
   getDay,
   locales,
 })
@@ -33,19 +35,19 @@ const parseToEvents = (timeSlots, title) => timeSlots.map(timeSlot => {
 })
 
 
-export const EStellaCalendar = ({ calendarStyle, userData }) => {
+export const EStellaCalendar = ({ calendarStyle, userData, outerOnPickSlot }) => {
 
     const [slots, setSlots] = useState([])
     const [reload, setReload] = useState(false)
 
-    const functionSource = userData?.userType === "host" ? hostFunctions : jobSeekerFunctions
+    const functionSource = userData?.userType === "host" ? hostFunctions : jobSeekerFunctions(outerOnPickSlot)
 
     const handleSelectSlot = (slotInfo) => {
         functionSource.onSelectSlot(slotInfo, reload, setReload, slots, userData)
     }
 
     const handleEventDeletion = (event) => {
-        functionSource.onDoubleClickEvent(event, slots, setSlots)
+        functionSource.onDoubleClickEvent(event, slots, userData.uuid, reload, setReload)
     }
 
     useEffect(() => {

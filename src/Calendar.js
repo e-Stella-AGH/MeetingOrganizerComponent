@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 const localizer = momentLocalizer(moment);
 
 const eventStyleGetter = (event, start, end, isSelected) => {
-    console.log(event);
     var style = {
 
         borderRadius: '0px',

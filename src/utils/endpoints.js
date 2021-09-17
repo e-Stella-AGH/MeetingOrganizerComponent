@@ -32,7 +32,6 @@ const fetchData = (url, method, body, title = "Getting data") => {
                 title: "Success",
                 icon: "success"
             })
-            console.log(response)
             if (isCorrectResponseStatus(response.status)) return response
             else throw response.msg
         })

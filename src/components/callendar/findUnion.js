@@ -60,7 +60,6 @@ Array.prototype.unique = function () {
 }
 
 const sortByDate = (a, b) => {
-  console.log(a, b)
   return a.startDatetime.getTime() > b.startDatetime.getTime() ? 1 : -1
 }
 

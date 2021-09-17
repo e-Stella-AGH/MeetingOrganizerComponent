@@ -15,14 +15,14 @@ const renderMeetingActions = () => {
         </ListItemIcon>
       </ListItem>
       <ListItem>
-        XD
+        Sample Meeting Action
       </ListItem>
     </>
   )
 }
 
 const App = () => {
-  return <MeetingOrganizer userData={ { userType: 'job_seeker', uuid: '264665a1-53eb-40fc-b263-697b0bf88a79' } } />
+  return <MeetingOrganizer userData={ { userType: 'job_seeker', uuid: '8380a212-3e29-430b-9d13-a752036ba6c4' } } />
 }
 
 export default App

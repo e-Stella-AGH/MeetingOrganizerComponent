@@ -7,7 +7,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { api } from '../../utils/endpoints';
 import { SingleMeeting } from './SingleMeeting'
 
-export const MeetingsMainView = ({ userData, renderMeetingActions, showLogout, drawerStyle: outerDrawerStyle }) => {
+export const MeetingsMainView = ({ renderMeetingActions, showLogout, drawerStyle: outerDrawerStyle, meetingUUID }) => {
 
     const [meetings, setMeetings] = useState([])
     const [reload, setReload] = useState(false)
@@ -36,7 +36,7 @@ export const MeetingsMainView = ({ userData, renderMeetingActions, showLogout, d
                 <ListItem>
                     <ListItemIcon>
                         <Button
-                            onClick={() => addMeetingPath(reload, setReload)}
+                            onClick={() => addMeetingPath(reload, setReload, meetingUUID)}
                         >
                             <AddCircleOutlineIcon fontSize="large" color="action" />
                         </Button>

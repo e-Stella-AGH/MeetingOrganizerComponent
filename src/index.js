@@ -22,7 +22,6 @@ export const MeetingOrganizer = ({outsideMeetingUUID, outsideJwt, meetingOrganiz
   }}/>)
 
   const meetingUUID = outsideMeetingUUID || uuidv4()
-  console.log(meetingUUID)
 
   const registerView = (<Register redirectToLogin={() => setView(loginView)} register={(credentials) => {
     if(credentials.password != credentials.repeatedPassword) {

@@ -31,7 +31,7 @@ const setDuration = (duration) => {
     info['duration'] = Number(duration)
 }
 
-const fireSetDuration = (reload, setReload, meetingUUID) => {
+const fireSetDuration = (reload, setReload) => {
     MySwal.fire({
         ...basicSwal,
         text: "Add Duration in minutes",
@@ -39,7 +39,7 @@ const fireSetDuration = (reload, setReload, meetingUUID) => {
     }).then(result => {
         if(result.isConfirmed) {
             setDuration(result.value)
-            api.createMeeting({uuid: meetingUUID, hosts: info['hosts'], guest: info['guest'], duration: info['duration'] })
+            api.createMeeting({uuid: info['uuid'], hosts: info['hosts'], guest: info['guest'], duration: info['duration'] })
                 .then(data => {
                     setReload(!reload)
                 })
@@ -47,24 +47,25 @@ const fireSetDuration = (reload, setReload, meetingUUID) => {
     })
 }
 
-const fireSetGuest = (reload, setReload, meetingUUID) => {
+const fireSetGuest = (reload, setReload) => {
     MySwal.fire({
         ...basicSwal,
         html: <AddGuest addGuest={setGuest} />
     }).then(result => {
         if(result.isConfirmed) {
-            fireSetDuration(reload, setReload, meetingUUID)
+            fireSetDuration(reload, setReload)
         }
     })
 }
 
 export const addMeetingPath = (reload, setReload, meetingUUID) => {
+    info['uuid'] = meetingUUID
     MySwal.fire({
         ...basicSwal,
         html: <AddHosts addHosts={setHosts} />
     }).then(result => {
         if(result.isConfirmed) {
-            fireSetGuest(reload, setReload, meetingUUID)
+            fireSetGuest(reload, setReload)
         }
     })
 }

@@ -35,7 +35,7 @@ const union = (set1, set2) => {
   parent1.slot.startDatetime = new Date(
     Math.min(parent1.slot.startDatetime, parent2.slot.startDatetime)
   )
-  parent1.slot.duration = (max - parent1.slot.startDatetime.getTime()) / 60000
+  parent1.slot.duration = Math.round((max - parent1.slot.startDatetime.getTime()) / 60000)
   parent2.parent = parent1
   if (parent1.rank == parent2.rank) parent1.rank++
 }

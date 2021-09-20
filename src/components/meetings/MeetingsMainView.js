@@ -6,6 +6,7 @@ import { addMeetingPath } from './AddMeeting'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { api } from '../../utils/endpoints';
 import { SingleMeeting } from './SingleMeeting'
+import { MeetingOrganizerDrawer } from '../Drawer'
 
 export const MeetingsMainView = ({ renderMeetingActions, showLogout, drawerStyle: outerDrawerStyle, meetingUUID }) => {
 
@@ -28,36 +29,12 @@ export const MeetingsMainView = ({ renderMeetingActions, showLogout, drawerStyle
             <div style={{marginLeft: '20%', display: 'flex', marginTop: '1em', flexFlow: 'row wrap', gap: '1em'}}>
                 {getMeetings()} 
             </div> 
-            <Drawer
-                variant="permanent"
-                style={{display: "flex", alignItems: "center"}}
-            >
-                <List style={{...drawerStyle}}>
-                <ListItem>
-                    <ListItemIcon>
-                        <Button
-                            onClick={() => addMeetingPath(reload, setReload, meetingUUID)}
-                        >
-                            <AddCircleOutlineIcon fontSize="large" color="action" />
-                        </Button>
-                    </ListItemIcon>
-                </ListItem>
-                </List>
-                <Divider />
-                <List>
-                    {renderMeetingActions?.()}
-                </List>
-                { showLogout && (<div>
-                <Divider />
-                <List>
-                    <ListItem>
-                        <Button onClick={() => {jwt.remove(); window.location.reload()}}>
-                            <ExitToAppIcon fontSize="large" color="action"/>
-                        </Button>
-                    </ListItem>
-                </List>
-                </div>)}
-            </Drawer>
+            <MeetingOrganizerDrawer
+                addAction={() => addMeetingPath(reload, setReload, meetingUUID)}
+                renderMeetingActions={renderMeetingActions}
+                showLogout={showLogout}
+                drawerStyle={drawerStyle}
+            />
         </div>
     )
 }

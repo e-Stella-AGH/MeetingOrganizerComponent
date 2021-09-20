@@ -40,7 +40,7 @@ export const MeetingOrganizer = ({outsideMeetingUUID, outsideJwt, meetingOrganiz
 
   const getUserView = (isValidJwt) => {
     if(userData?.userType === "job_seeker" || userData?.userType === "host") {
-      return <EStellaCalendar userData={userData} outerOnPickSlot={outerFunctions?.onPickSlot || emptyFunction} />
+      return <EStellaCalendar userData={userData} outerOnPickSlot={outerFunctions?.onPickSlot || emptyFunction} drawerStyle={drawerStyle} />
     } 
     if(isValidJwt) {
       return <MeetingsMainView renderMeetingActions={renderMeetingActions} showLogout={!!showLogout} drawerStyle={drawerStyle} meetingUUID={meetingUUID} />

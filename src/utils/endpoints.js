@@ -100,6 +100,10 @@ export const api = {
     registerFromIntegration: (jwt) => {
         return fetch(`${basicUrl}organizer/login_integration`, { method: 'POST', headers: { 'authorization': jwt } })
             .then(response => response.text())
+    },
+
+    askForMoreSlots: (meetingUUID) => {
+        return fetchData(`${basicUrl}meeting/${meetingUUID}/ask_for_more_slots`, POST)
     }
 
 }

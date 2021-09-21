@@ -9,19 +9,20 @@ import enUS from 'date-fns/locale/en-US'
 import { api } from '../../utils/endpoints';
 import Swal from 'sweetalert2';
 import { hostFunctions, jobSeekerFunctions } from './calendarUtils';
+import { MeetingOrganizerDrawer } from '../Drawer';
 
 const locales = {
-  'en-US': enUS
+    'en-US': enUS
 }
 
 const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek: () => {
-    return startOfWeek(new Date(), { weekStartsOn: 1 });
-  },
-  getDay,
-  locales,
+    format,
+    parse,
+    startOfWeek: () => {
+        return startOfWeek(new Date(), { weekStartsOn: 1 });
+    },
+    getDay,
+    locales,
 })
 
 const parseToEvents = (timeSlots, title) => timeSlots.map(timeSlot => {
@@ -35,7 +36,7 @@ const parseToEvents = (timeSlots, title) => timeSlots.map(timeSlot => {
 })
 
 
-export const EStellaCalendar = ({ calendarStyle, userData, outerOnPickSlot }) => {
+export const EStellaCalendar = ({ calendarStyle, userData, outerOnPickSlot, drawerStyle: outerDrawerStyle }) => {
 
     const [slots, setSlots] = useState([])
     const [reload, setReload] = useState(false)
@@ -46,9 +47,11 @@ export const EStellaCalendar = ({ calendarStyle, userData, outerOnPickSlot }) =>
         functionSource.onSelectSlot(slotInfo, reload, setReload, slots, userData)
     }
 
-    const handleEventDeletion = (event) => {
+    const handleEventDoubleClick = (event) => {
         functionSource.onDoubleClickEvent(event, slots, userData.uuid, reload, setReload)
     }
+
+    const drawerStyle = outerDrawerStyle || {}
 
     useEffect(() => {
         functionSource.getSlots(userData.uuid, setSlots)
@@ -59,23 +62,50 @@ export const EStellaCalendar = ({ calendarStyle, userData, outerOnPickSlot }) =>
     const maxTime = new Date()
     maxTime.setHours(20, 0, 0)
 
+    const askForMoreSlots = () => {
+        Swal.fire({
+            title: 'Do you want to ask hosts for more slots?',
+            icon: 'question',
+            text: `Please, consider if you can pick one of possible slots, so we won't need to bother hosts.`,
+            showCancelButton: true
+        }).then(result => {
+            if (result.isConfirmed) {
+                api.askForMoreSlots(userData.uuid)
+                    .then(res => {
+                        Swal.fire({
+                            text: "We've asked hosts to add more meetings! Check of this page in few days to see if they added slots, if not, please bother them some more.",
+                            icon: 'success'
+                        })
+                    })
+            }
+        })
+    }
+
+    const userTypeStyle = userData?.userType === "job_seeker" ? { marginLeft: "10%" } : {}
+
     return (
         <div>
+            {
+                userData?.userType === "job_seeker" && <MeetingOrganizerDrawer
+                    drawerStyle={drawerStyle}
+                    addAction={askForMoreSlots}
+                />
+            }
             <Calendar
                 localizer={localizer}
-                style={calendarStyle}
+                style={{ ...calendarStyle, ...userTypeStyle }}
                 events={parseToEvents(slots, functionSource.getEventTitle())}
                 selectable
                 onSelectSlot={handleSelectSlot}
                 defaultView='week'
                 max={maxTime}
                 min={minTime}
-                onDoubleClickEvent={handleEventDeletion}
+                onDoubleClickEvent={handleEventDoubleClick}
             />
         </div>
     )
 }
 
 EStellaCalendar.defaultProps = {
-    calendarStyle: {height: 800}
+    calendarStyle: { height: 800 }
 }

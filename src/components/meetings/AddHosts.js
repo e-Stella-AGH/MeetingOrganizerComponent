@@ -41,7 +41,7 @@ export const AddHosts = ({ addHosts }) => {
                 <DoneIcon />
             </IconButton>
             <div style={{marginTop: '2em'}}>
-                <HostsList hosts={hosts} onDelete={(host) => handleHostDelete(host)} />
+                <HostsList hosts={hosts} onDelete={(host) => handleHostDelete(host)} center />
             </div>
         </div>
     )

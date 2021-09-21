@@ -39,8 +39,10 @@ const fireSetDuration = (reload, setReload) => {
     }).then(result => {
         if(result.isConfirmed) {
             setDuration(result.value)
-            api.createMeeting({ hosts: info['hosts'], guest: info['guest'], duration: info['duration'] })
-                .then(data => setReload(!reload))
+            api.createMeeting({uuid: info['uuid'], hosts: info['hosts'], guest: info['guest'], duration: info['duration'] })
+                .then(data => {
+                    setReload(!reload)
+                })
         }
     })
 }
@@ -56,7 +58,8 @@ const fireSetGuest = (reload, setReload) => {
     })
 }
 
-export const addMeetingPath = (reload, setReload) => {
+export const addMeetingPath = (reload, setReload, meetingUUID) => {
+    info['uuid'] = meetingUUID
     MySwal.fire({
         ...basicSwal,
         html: <AddHosts addHosts={setHosts} />

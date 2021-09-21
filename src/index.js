@@ -6,11 +6,12 @@ import { Register } from './components/auth/Register'
 import { EStellaCalendar } from './components/callendar/Callendar'
 import { MeetingsMainView } from './components/meetings/MeetingsMainView'
 import { jwt } from './utils/jwtApi';
+import { uuidv4 } from './utils/utils';
 import Swal from 'sweetalert2';
 
 console.warn = console.error = () => {};
 
-export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userData, renderMeetingActions, theme, outerOnPickSlot }) => {
+export const MeetingOrganizer = ({outsideMeetingUUID, outsideJwt, meetingOrganizerBaseLink, userData, renderMeetingActions, theme, outerFunctions, showLogout, drawerStyle }) => {
 
   const loginView = (<Login redirectToRegister={() => setView(registerView)} login={(credentials) => {
     api.login(credentials)
@@ -19,6 +20,8 @@ export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userDat
         setView(<MeetingsMainView renderMeetingActions={renderMeetingActions} />)
       })
   }}/>)
+
+  const meetingUUID = outsideMeetingUUID || uuidv4()
 
   const registerView = (<Register redirectToLogin={() => setView(loginView)} register={(credentials) => {
     if(credentials.password != credentials.repeatedPassword) {
@@ -33,12 +36,14 @@ export const MeetingOrganizer = ({ outsideJwt, meetingOrganizerBaseLink, userDat
     }
   }} />)
 
+  const emptyFunction = () => {}
+
   const getUserView = (isValidJwt) => {
     if(userData?.userType === "job_seeker" || userData?.userType === "host") {
-      return <EStellaCalendar userData={userData} outerOnPickSlot={outerOnPickSlot} />
+      return <EStellaCalendar userData={userData} outerOnPickSlot={outerFunctions?.onPickSlot || emptyFunction} drawerStyle={drawerStyle} />
     } 
     if(isValidJwt) {
-      return <MeetingsMainView renderMeetingActions={renderMeetingActions} />
+      return <MeetingsMainView renderMeetingActions={renderMeetingActions} showLogout={!!showLogout} drawerStyle={drawerStyle} meetingUUID={meetingUUID} />
     }
     return loginView
   }
@@ -86,5 +91,9 @@ MeetingOrganizer.propTypes = {
     uuid: PropTypes.string
   }),
   renderMeetingActions: PropTypes.func,
-  outerOnPickSlot: PropTypes.func
+  outerFunctions: PropTypes.exact({
+    onPickSlot: PropTypes.func.isRequired
+  }),
+  showLogout: PropTypes.bool,
+  drawerStyle: PropTypes.object
 }

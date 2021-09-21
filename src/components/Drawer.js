@@ -1,13 +1,16 @@
 import React from 'react'
+import { Drawer, List, ListItem, ListItemIcon, Button, Divider } from '@material-ui/core'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 export const MeetingOrganizerDrawer = ({ renderMeetingActions, showLogout, addAction, drawerStyle }) => {
 
     return (
         <Drawer
-                variant="permanent"
-                style={{display: "flex", alignItems: "center"}}
-            >
-                <List style={{...drawerStyle}}>
+            variant="permanent"
+            style={{ display: "flex", alignItems: "center" }}
+        >
+            <List style={{ ...drawerStyle }}>
                 <ListItem>
                     <ListItemIcon>
                         <Button
@@ -17,21 +20,21 @@ export const MeetingOrganizerDrawer = ({ renderMeetingActions, showLogout, addAc
                         </Button>
                     </ListItemIcon>
                 </ListItem>
-                </List>
-                <Divider />
-                <List>
-                    {renderMeetingActions?.()}
-                </List>
-                { showLogout && (<div>
+            </List>
+            <Divider />
+            <List>
+                {renderMeetingActions?.()}
+            </List>
+            {showLogout && (<div>
                 <Divider />
                 <List>
                     <ListItem>
-                        <Button onClick={() => {jwt.remove(); window.location.reload()}}>
-                            <ExitToAppIcon fontSize="large" color="action"/>
+                        <Button onClick={() => { jwt.remove(); window.location.reload() }}>
+                            <ExitToAppIcon fontSize="large" color="action" />
                         </Button>
                     </ListItem>
                 </List>
-                </div>)}
-            </Drawer>
+            </div>)}
+        </Drawer>
     )
 }

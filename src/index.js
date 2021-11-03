@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 
 console.warn = console.error = () => {};
 
-export const MeetingOrganizer = ({outsideMeetingUUID, outsideJwt, meetingOrganizerBaseLink, userData, renderMeetingActions, theme, outerFunctions, showLogout, drawerStyle }) => {
+export const MeetingOrganizer = ({outsideMeetingValues, outsideJwt, meetingOrganizerBaseLink, userData, renderMeetingActions, theme, outerFunctions, showLogout, drawerStyle }) => {
 
   const loginView = (<Login redirectToRegister={() => setView(registerView)} login={(credentials) => {
     api.login(credentials)
@@ -21,7 +21,8 @@ export const MeetingOrganizer = ({outsideMeetingUUID, outsideJwt, meetingOrganiz
       })
   }}/>)
 
-  const meetingUUID = outsideMeetingUUID || uuidv4()
+  const meetingValues = outsideMeetingValues || { uuid: uuidv4() }
+  if (!meetingValues.uuid) meetingValues.uuid = uuidv4()
 
   const registerView = (<Register redirectToLogin={() => setView(loginView)} register={(credentials) => {
     if(credentials.password != credentials.repeatedPassword) {
@@ -43,7 +44,7 @@ export const MeetingOrganizer = ({outsideMeetingUUID, outsideJwt, meetingOrganiz
       return <EStellaCalendar userData={userData} outerOnPickSlot={outerFunctions?.onPickSlot || emptyFunction} drawerStyle={drawerStyle} />
     } 
     if(isValidJwt) {
-      return <MeetingsMainView renderMeetingActions={renderMeetingActions} showLogout={!!showLogout} drawerStyle={drawerStyle} meetingUUID={meetingUUID} />
+      return <MeetingsMainView renderMeetingActions={renderMeetingActions} showLogout={!!showLogout} drawerStyle={drawerStyle} meetingValues={meetingValues} />
     }
     return loginView
   }
@@ -95,5 +96,10 @@ MeetingOrganizer.propTypes = {
     onPickSlot: PropTypes.func.isRequired
   }),
   showLogout: PropTypes.bool,
-  drawerStyle: PropTypes.object
+  drawerStyle: PropTypes.object,
+  outsideMeetingValues: PropTypes.exact({
+    uuid: PropTypes.string,
+    hosts: PropTypes.array,
+    guest: PropTypes.string
+  })
 }

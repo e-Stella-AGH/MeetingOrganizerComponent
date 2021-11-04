@@ -4,10 +4,10 @@ import React, { useState } from 'react'
 import Swal from 'sweetalert2'
 import { validateEmail } from '../../utils/utils'
 
-export const AddGuest = ({ addGuest }) => {
+export const AddGuest = ({ addGuest, defaultGuest }) => {
 
     const [current, setCurrent] = useState('')
-    const [confirmed, setConfirmed] = useState('')
+    const [confirmed, setConfirmed] = useState(defaultGuest)
 
     const addCurrentGuest = () => {
         Swal.resetValidationMessage()

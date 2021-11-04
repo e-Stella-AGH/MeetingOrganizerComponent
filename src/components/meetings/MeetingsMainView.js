@@ -3,8 +3,9 @@ import { SingleMeeting } from './SingleMeeting'
 import { MeetingOrganizerDrawer } from '../Drawer'
 import { api } from '../../utils/endpoints';
 import { addMeetingPath } from './AddMeeting'
+import { EmptyState } from './EmptyState'
 
-export const MeetingsMainView = ({ renderMeetingActions, showLogout, drawerStyle: outerDrawerStyle, meetingUUID }) => {
+export const MeetingsMainView = ({ renderMeetingActions, showLogout, drawerStyle: outerDrawerStyle, meetingValues }) => {
 
     const [meetings, setMeetings] = useState([])
     const [reload, setReload] = useState(false)
@@ -22,11 +23,14 @@ export const MeetingsMainView = ({ renderMeetingActions, showLogout, drawerStyle
 
     return (
         <div>
-            <div style={{ marginLeft: '20%', display: 'flex', marginTop: '1em', flexFlow: 'row wrap', gap: '1em' }}>
-                {getMeetings()}
-            </div>
+            { meetings.length > 0 ?
+                <div style={{ marginLeft: '20%', display: 'flex', marginTop: '1em', flexFlow: 'row wrap', gap: '1em' }}>
+                    {getMeetings()}
+                </div>
+                : <EmptyState reload={reload} setReload={setReload} meetingValues={meetingValues} />
+            }
             <MeetingOrganizerDrawer
-                addAction={() => addMeetingPath(reload, setReload, meetingUUID)}
+                addAction={() => addMeetingPath(reload, setReload, meetingValues)}
                 renderMeetingActions={renderMeetingActions}
                 showLogout={showLogout}
                 drawerStyle={drawerStyle}

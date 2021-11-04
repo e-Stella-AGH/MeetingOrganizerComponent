@@ -47,10 +47,10 @@ const fireSetDuration = (reload, setReload) => {
     })
 }
 
-const fireSetGuest = (reload, setReload) => {
+const fireSetGuest = (reload, setReload, meetingValues) => {
     MySwal.fire({
         ...basicSwal,
-        html: <AddGuest addGuest={setGuest} />
+        html: <AddGuest addGuest={setGuest} defaultGuest={meetingValues?.guest || ''} />
     }).then(result => {
         if(result.isConfirmed) {
             fireSetDuration(reload, setReload)
@@ -58,14 +58,16 @@ const fireSetGuest = (reload, setReload) => {
     })
 }
 
-export const addMeetingPath = (reload, setReload, meetingUUID) => {
-    info['uuid'] = meetingUUID
+export const addMeetingPath = (reload, setReload, meetingValues) => {
+    info['uuid'] = meetingValues.uuid
+    info['hosts'] = meetingValues?.hosts || []
+    info['guest'] = meetingValues?.guest || ''
     MySwal.fire({
         ...basicSwal,
-        html: <AddHosts addHosts={setHosts} />
+        html: <AddHosts addHosts={setHosts} defaultHosts={meetingValues?.hosts || []} />
     }).then(result => {
         if(result.isConfirmed) {
-            fireSetGuest(reload, setReload)
+            fireSetGuest(reload, setReload, meetingValues)
         }
     })
 }

@@ -5,10 +5,10 @@ import { validateEmail } from '../../utils/utils'
 import Swal from 'sweetalert2'
 import { HostsList } from './HostsList'
 
-export const AddHosts = ({ addHosts }) => {
+export const AddHosts = ({ addHosts, defaultHosts }) => {
 
 
-    const [hosts, setHosts] = useState([])
+    const [hosts, setHosts] = useState(defaultHosts)
     const [currentHost, setCurrentHost] = useState('')
 
     const handleHostDelete = (hostMail) => {

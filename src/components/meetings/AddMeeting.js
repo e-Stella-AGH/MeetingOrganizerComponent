@@ -4,7 +4,6 @@ import withReactContent from 'sweetalert2-react-content'
 import { AddHosts } from './AddHosts'
 import { AddGuest } from './AddGuest'
 import { api } from '../../utils/endpoints'
-import { jwt } from '../../utils/jwtApi'
 
 const basicSwal = {
     title: 'Add new meeting',

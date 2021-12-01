@@ -21,16 +21,18 @@ export const MeetingsMainView = ({ renderMeetingActions, showLogout, drawerStyle
         <SingleMeeting key={meeting.uuid} meeting={meeting} reload={reload} setReload={setReload} />
     ))
 
+    const addAction = () => addMeetingPath(reload, setReload, meetingValues, allowedHostsMails)
+
     return (
         <div>
             { meetings.length > 0 ?
                 <div style={{ marginLeft: '20%', display: 'flex', marginTop: '1em', flexFlow: 'row wrap', gap: '1em' }}>
                     {getMeetings()}
                 </div>
-                : <EmptyState reload={reload} setReload={setReload} meetingValues={meetingValues} />
+                : <EmptyState addMeetingPath={addAction} />
             }
             <MeetingOrganizerDrawer
-                addAction={() => addMeetingPath(reload, setReload, meetingValues, allowedHostsMails)}
+                addAction={addAction}
                 renderMeetingActions={renderMeetingActions}
                 showLogout={showLogout}
                 drawerStyle={drawerStyle}

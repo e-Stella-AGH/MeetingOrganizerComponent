@@ -10,9 +10,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 export const AddHosts = ({ addHosts, defaultHosts, allowedHostsMails }) => {
 
-
     const [hosts, setHosts] = useState(defaultHosts)
     const [currentHost, setCurrentHost] = useState('')
+    const [selectValue, setSelectValue] = useState('')
 
     const handleHostDelete = (hostMail) => {
         const newHosts = hosts.filter(host => host !== hostMail)
@@ -35,31 +35,33 @@ export const AddHosts = ({ addHosts, defaultHosts, allowedHostsMails }) => {
         const currentHost = target.value
         addHosts([...hosts, currentHost])
         setHosts([...hosts, currentHost])
+        setSelectValue('')
     }
 
     const getInput = () => allowedHostsMails ? (
         <div>
-            <InputLabel id="hosts-label">Host Mail</InputLabel>
-            <Select labelId="hosts-label" onChange={handleSelectChange}>
+            <InputLabel id="hosts-label" style={{marginBottom: '10px'}}>Host Mail</InputLabel>
+            <Select labelId="hosts-label" onChange={handleSelectChange} value={selectValue} style={{width: "80%"}}>
                 {allowedHostsMails.map(allowedHostMail => (<MenuItem key={allowedHostMail} value={allowedHostMail}>{allowedHostMail}</MenuItem>))}
             </Select>
         </div>
     )
-    
-    : (<TextField
+    : (
+    <div><TextField
         variant="outlined"
         label="Add host"
         onChange={({ target }) => setCurrentHost(target.value)}
         value={currentHost}
-    />)
+    />
+    <IconButton onClick={addCurrentHost}>
+            <DoneIcon />
+        </IconButton>
+    </div>)
 
     return (
         <div style={{minHeight: "50vh"}}>
             <Typography variant="h4" style={{marginBottom: "3em"}}>Add hosts by mail</Typography>
             {getInput()}
-            <IconButton onClick={addCurrentHost}>
-                <DoneIcon />
-            </IconButton>
             <div style={{marginTop: '2em'}}>
                 <HostsList hosts={hosts} onDelete={(host) => handleHostDelete(host)} center />
             </div>

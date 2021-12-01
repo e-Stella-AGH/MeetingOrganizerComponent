@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 import { jwt } from './jwtApi';
 
-let basicUrl = "http://localhost:4000/"
+let basicUrl = "https://meeting-organizer-estella.herokuapp.com/"
 
 const getHeader = (method, body = null) => {
     const headerWithoutBody = {

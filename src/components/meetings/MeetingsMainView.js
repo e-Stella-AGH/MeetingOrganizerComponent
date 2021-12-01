@@ -5,7 +5,7 @@ import { api } from '../../utils/endpoints';
 import { addMeetingPath } from './AddMeeting'
 import { EmptyState } from './EmptyState'
 
-export const MeetingsMainView = ({ renderMeetingActions, showLogout, drawerStyle: outerDrawerStyle, meetingValues }) => {
+export const MeetingsMainView = ({ renderMeetingActions, showLogout, drawerStyle: outerDrawerStyle, meetingValues, allowedHostsMails }) => {
 
     const [meetings, setMeetings] = useState([])
     const [reload, setReload] = useState(false)
@@ -30,7 +30,7 @@ export const MeetingsMainView = ({ renderMeetingActions, showLogout, drawerStyle
                 : <EmptyState reload={reload} setReload={setReload} meetingValues={meetingValues} />
             }
             <MeetingOrganizerDrawer
-                addAction={() => addMeetingPath(reload, setReload, meetingValues)}
+                addAction={() => addMeetingPath(reload, setReload, meetingValues, allowedHostsMails)}
                 renderMeetingActions={renderMeetingActions}
                 showLogout={showLogout}
                 drawerStyle={drawerStyle}

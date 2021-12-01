@@ -58,13 +58,13 @@ const fireSetGuest = (reload, setReload, meetingValues) => {
     })
 }
 
-export const addMeetingPath = (reload, setReload, meetingValues) => {
+export const addMeetingPath = (reload, setReload, meetingValues, allowedHostsMails) => {
     info['uuid'] = meetingValues.uuid
     info['hosts'] = meetingValues?.hosts || []
     info['guest'] = meetingValues?.guest || ''
     MySwal.fire({
         ...basicSwal,
-        html: <AddHosts addHosts={setHosts} defaultHosts={meetingValues?.hosts || []} />
+        html: <AddHosts addHosts={setHosts} defaultHosts={meetingValues?.hosts || []} allowedHostsMails={allowedHostsMails} />
     }).then(result => {
         if(result.isConfirmed) {
             fireSetGuest(reload, setReload, meetingValues)

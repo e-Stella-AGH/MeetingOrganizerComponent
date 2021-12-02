@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 
 console.warn = console.error = () => {};
 
-export const MeetingOrganizer = ({outsideMeetingValues, outsideJwt, meetingOrganizerBaseLink, userData, renderMeetingActions, theme, outerFunctions, showLogout, drawerStyle }) => {
+export const MeetingOrganizer = ({outsideMeetingValues, outsideJwt, meetingOrganizerBaseLink, userData, renderMeetingActions, theme, outerFunctions, showLogout, drawerStyle, allowedHostsMails }) => {
 
   const loginView = (<Login redirectToRegister={() => setView(registerView)} login={(credentials) => {
     api.login(credentials)
@@ -44,7 +44,7 @@ export const MeetingOrganizer = ({outsideMeetingValues, outsideJwt, meetingOrgan
       return <EStellaCalendar userData={userData} outerOnPickSlot={outerFunctions?.onPickSlot || emptyFunction} drawerStyle={drawerStyle} />
     } 
     if(isValidJwt) {
-      return <MeetingsMainView renderMeetingActions={renderMeetingActions} showLogout={!!showLogout} drawerStyle={drawerStyle} meetingValues={meetingValues} />
+      return <MeetingsMainView renderMeetingActions={renderMeetingActions} showLogout={!!showLogout} drawerStyle={drawerStyle} meetingValues={meetingValues} allowedHostsMails={allowedHostsMails} />
     }
     return loginView
   }
